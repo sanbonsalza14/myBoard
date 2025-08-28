@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>Test Main</title>
+</head>
+<body>
+<div th:if="${state}">
+    <div class="alert alert-warning" role="alert">
+        <strong th:text="${state} + ' 처리되었습니다!'">처리되었습니다!</strong>
+    </div>
+</div>
+
+<h3>여러가지 ModelAttribute 전달 방법</h3>
+
+<ul>
+    <li><a th:href="@{/mapping/page}">page.html 이동</a></li>
+    <li><a th:href="@{/mapping/requestMapping}">RequestMapping And Model</a></li>
+    <li><a th:href="@{/mapping/modelAndView}">modelAndView (redirect)</a></li>
+    <li><a th:href="@{/mapping/redirectView}">RedirectView (redirect)</a></li>
+    <li><a th:href="@{/mapping/delete}">삭제하기</a></li>
+    <li><a th:href="@{/mapping/modelAndView2}">modelAndView2 (direct view)</a></li>
+</ul>
+
+<hr />
+<h3>외부 URL 사용</h3>
+<ul>
+    <li><a th:href="@{/mapping/naver}">네이버</a></li>
+    <li><a th:href="@{/mapping/local}">리액트 로컬</a></li>
+</ul>
+</body>
+</html>
