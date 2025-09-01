@@ -24,6 +24,7 @@ public class ArticleController {
     private final ArticleService articleService;
     private final PaginationService paginationService;
     private final CommentService commentService;
+
     @GetMapping({"", "/"})
     public String showArticles(Model model,
                                @PageableDefault(
@@ -89,30 +90,31 @@ public class ArticleController {
         return "redirect:/articles";
     }
 
-    //업데이드화면 보이기
+    // 업데이트 화면 보이기
     @GetMapping("{id}/update")
     public String viewUpdateArticle(@PathVariable("id") Long id,
                                     Model model) {
         model.addAttribute("dto",
                 articleService.getOneArticle(id));
         return "/articles/update";
-
     }
 
-    //게시글 업데이트 처리
+    // 게시글 업데이트 처리
     @PostMapping("update")
-    public String updateArticle(
-            @ModelAttribute("dto") ArticleDto dto) {
+    public String updateArticle(@ModelAttribute("dto") ArticleDto dto) {
         articleService.updateArticle(dto);
         return "redirect:/articles";
     }
-    //댓글 수정 폼 보이기
-    @GetMapping("comments/view/{commentId}")
-    public String commentUpdateFormView(@PathVariable("commentId")Long commentId) {
-        //commentService의 한 개 댓글 찾기 서비스로 가져오기
-        Map<String, Object> comment = commentService.findComment(commentId);
 
+    // 댓글 수정 폼 보이기
+    @GetMapping("comments/view/{commentId}")
+    public String commentUpdateFormView(
+            @PathVariable("commentId") Long commentId,
+            Model model) {
+        // CommentService의 한 개 댓글 찾기 서비스로 가져오기
+        Map<String, Object> comment = commentService.findComment(commentId);
+        model.addAttribute("dto", comment.get("dto"));
+        model.addAttribute("articleId", comment.get("articleId"));
         return "/articles/update_comment";
     }
-
 }
