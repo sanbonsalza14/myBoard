@@ -1,5 +1,6 @@
 package com.my.board.controller;
 
+import com.my.board.api.service.CommentService;
 import com.my.board.dto.ArticleDto;
 import com.my.board.service.ArticleService;
 import com.my.board.service.PaginationService;
@@ -10,13 +11,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("articles")
@@ -24,7 +23,7 @@ import java.util.List;
 public class ArticleController {
     private final ArticleService articleService;
     private final PaginationService paginationService;
-
+    private final CommentService commentService;
     @GetMapping({"", "/"})
     public String showArticles(Model model,
                                @PageableDefault(
@@ -102,8 +101,18 @@ public class ArticleController {
 
     //게시글 업데이트 처리
     @PostMapping("update")
-    public String updateArticle(@ModelAttribute("dto") ArticleDto dto) {
+    public String updateArticle(
+            @ModelAttribute("dto") ArticleDto dto) {
         articleService.updateArticle(dto);
         return "redirect:/articles";
     }
+    //댓글 수정 폼 보이기
+    @GetMapping("comments/view/{commentId}")
+    public String commentUpdateFormView(@PathVariable("commentId")Long commentId) {
+        //commentService의 한 개 댓글 찾기 서비스로 가져오기
+        Map<String, Object> comment = commentService.findComment(commentId);
+
+        return "/articles/update_comment";
+    }
+
 }
